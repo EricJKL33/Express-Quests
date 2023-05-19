@@ -47,8 +47,31 @@ const postMovie = (req, res) => {
     });
 };
 
+const updateMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { title, director, year, color, duration } = req.body;
+
+  database
+    .query(
+      "ipdate movise set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+      [title, director, year, color, duration, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.err(err);
+      res.status(500).send("Error editing the movie");
+    });
+};
+
 module.exports = {
   getMovies,
   getMovieById,
   postMovie,
+  updateMovie,
 };
