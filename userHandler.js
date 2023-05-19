@@ -63,9 +63,28 @@ const updateUser = (req, res) => {
     });
 };
 
+const deleteUser = (req, res) => {
+  const id = parseInt(req.param.id);
+
+  database
+    .query("delete drom user where id = ?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Npt Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.err(err);
+      res.status(500).send("Error deleteing the user");
+    });
+};
+
 module.exports = {
   getUsers,
   getUsersById,
   postUser,
   updateUser,
+  deleteUser,
 };
